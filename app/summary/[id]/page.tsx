@@ -184,11 +184,6 @@ export default function SummaryPage({ params }: { params: { id: string } }) {
               {headline}
             </h1>
             <div className="mt-3 flex flex-wrap items-center gap-2">
-              {clampPct(topProb) >= 20 && (
-                <Badge className="border-clinical/40 bg-clinical/10 text-clinical-soft">
-                  {clampPct(topProb)}% confidence
-                </Badge>
-              )}
               {c.agreement_level && c.agreement_level !== "none" && (
                 <Badge variant="secondary">
                   {c.agreement_level === "strong"
