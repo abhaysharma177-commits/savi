@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* shadcn/ui design tokens (dark), mapped to the Second Opinion palette. */
+:root {
+  --background: 240 6% 4%;
+  --foreground: 0 0% 98%;
+  --card: 240 5% 8%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 6% 11%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 240 6% 4%;
+  --secondary: 240 5% 11%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 5% 11%;
+  --muted-foreground: 240 5% 65%;
+  --accent: 240 5% 14%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 6 90% 64%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 7% 16%;
+  --input: 240 7% 16%;
+  --ring: 173 56% 42%;
+  --radius: 0.7rem;
+}
+
+html {
+  color-scheme: light;
+  scroll-behavior: smooth;
+  background-color: #fafaf9;
+}
+
+body {
+  background-color: #fafaf9;
+  color: #131417;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(19, 20, 23, 0.12);
+  color: #131417;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d4d2ce transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #d4d2ce;
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-line bg-surface shadow-card;
+  }
+  .card-hover {
+    @apply transition duration-200 will-change-transform hover:-translate-y-0.5 hover:border-line-strong hover:shadow-lift;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-surface-2 px-3 py-1 text-xs text-ink-muted;
+  }
+  .mono {
+    font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-base transition
+      hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:ring-offset-2 focus-visible:ring-offset-base
+      active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  .btn-accent {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-clinical px-5 py-3 text-sm font-semibold text-white transition
+      hover:bg-clinical-deep focus:outline-none focus-visible:ring-2 focus-visible:ring-clinical-soft focus-visible:ring-offset-2 focus-visible:ring-offset-base
+      active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-transparent px-4 py-2.5 text-sm font-medium text-ink-muted transition
+      hover:border-line-strong hover:bg-surface-2 hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/20 active:scale-[0.985];
+  }
+  .field {
+    @apply w-full rounded-xl border border-line bg-base/60 p-4 text-[15px] leading-relaxed text-ink placeholder:text-ink-faint transition
+      focus:border-clinical/60 focus:outline-none focus:ring-2 focus:ring-clinical/25 disabled:opacity-60;
+  }
+  .section-label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-faint;
+  }
+  .hairline {
+    @apply border-t border-line;
+  }
+}
+
+/* Scroll reveal, toggled by the Reveal component. */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes savi-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: savi-marquee 34s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* GP handout print styling: clean black on white. */
+@media print {
+  body {
+    background: #ffffff !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .printable,
+  .printable * {
+    color: #111827 !important;
+    background: #ffffff !important;
+    border-color: #d1d5db !important;
+    box-shadow: none !important;
+  }
+  .printable .print-keep-blue {
+    color: #1d4ed8 !important;
+  }
+  .printable .print-keep-amber {
+    color: #b45309 !important;
+  }
+  .printable .print-bar {
+    background: #1d4ed8 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .printable .card {
+    border: 1px solid #d1d5db !important;
+  }
+}
