@@ -16,6 +16,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://trysavi.vercel.app"),
   title: "Savi — a second opinion on your health, from the world's best doctors",
   description:
     "Tell us what's going on. Real, verified doctors from around the world review your case, and you get one clear answer. Free to start.",
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FBFAF7",
+  themeColor: "#FAFAF9",
   width: "device-width",
   initialScale: 1,
 };
