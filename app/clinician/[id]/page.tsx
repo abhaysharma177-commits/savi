@@ -56,9 +56,11 @@ export default function ClinicianCasePage({ params }: { params: { id: string } }
       if (!res.ok || !json.case) throw new Error(json.error || "Case not found.");
       setBundle(json);
       setPhase("ready");
+      return json;
     } catch (e) {
       setError(msg(e));
       setPhase("error");
+      return null;
     }
   }, [caseId]);
 
@@ -83,7 +85,10 @@ export default function ClinicianCasePage({ params }: { params: { id: string } }
       if (!res.ok) throw new Error(json.error || "Could not save your opinion.");
       setDiagnosis("");
       setAssessment("");
-      await load();
+      const updated = await load();
+      if (updated && updated.opinions.length >= 2) {
+        await generateConsensus();
+      }
     } catch (e) {
       setFormError(msg(e));
     } finally {

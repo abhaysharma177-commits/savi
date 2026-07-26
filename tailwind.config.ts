@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 
 /**
- * Design system — a premium, editorial dark palette (Linear / Vercel register).
+ * Design system — a premium, editorial light palette (Linear / Vercel register).
  * True-neutral greys, one restrained cobalt accent, semantic colours reserved
  * for real status. No gradients-as-decoration, no glow, no neon.
  */
