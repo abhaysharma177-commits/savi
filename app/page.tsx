@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, ShieldCheck, UserCheck, FileCheck2, Lock } from "lucide-react";
 import { getUser } from "@/lib/supabaseServer";
 import { Logo } from "@/components/brand/Logo";
 import { Reveal } from "@/components/motion/Reveal";
+import { FaqAccordion } from "@/components/FaqAccordion";
 
 export const dynamic = "force-dynamic";
 
@@ -29,13 +30,23 @@ const STEPS = [
   },
   {
     n: "02",
-    title: "The best doctors review it",
-    body: "We send your case to specialists who fit it, wherever in the world they are.",
+    title: "We protect your privacy",
+    body: "Anything that could identify you is stripped out first. What's left is a clean clinical picture, nothing more.",
   },
   {
     n: "03",
-    title: "Get one clear answer",
-    body: "See what they agree on, and what to do next, written in plain English.",
+    title: "Matched to the right specialists",
+    body: "Your case goes to doctors whose training actually fits it, wherever in the world they are.",
+  },
+  {
+    n: "04",
+    title: "Independent review, then a safety check",
+    body: "Each doctor forms their own view first. A second pass checks for anything that could have been missed.",
+  },
+  {
+    n: "05",
+    title: "One clear, signed answer",
+    body: "See what they agree on, what they don't, and what to do next, in plain English, signed by a named doctor.",
   },
 ];
 
@@ -133,6 +144,27 @@ export default async function HomePage() {
             >
               Free to start · Real, verified doctors · No referral needed
             </p>
+            <div
+              className="animate-fade-up mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-savi-muted"
+              style={{ animationDelay: "300ms" }}
+            >
+              <span className="inline-flex items-center gap-1.5">
+                <ShieldCheck className="h-4 w-4 text-savi-accent" />
+                Anonymised before review
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <UserCheck className="h-4 w-4 text-savi-accent" />
+                Every doctor licence-checked
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <FileCheck2 className="h-4 w-4 text-savi-accent" />
+                Signed by name, not a bot
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Lock className="h-4 w-4 text-savi-accent" />
+                Encrypted, never sold
+              </span>
+            </div>
           </div>
         </section>
 
@@ -161,7 +193,7 @@ export default async function HomePage() {
             <h2 className="max-w-2xl font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
               Getting a second opinion used to be hard. Not anymore.
             </h2>
-            <div className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-3">
+            <div className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
               {STEPS.map((s) => (
                 <div
                   key={s.n}
@@ -211,6 +243,144 @@ export default async function HomePage() {
                   </div>
                 ))}
               </div>
+            </div>
+          </section>
+        </Reveal>
+
+        {/* Privacy */}
+        <Reveal>
+          <section className="mx-auto max-w-6xl px-5 pt-14 sm:px-8 sm:pt-20">
+            <div className="grid items-center gap-12 lg:grid-cols-2">
+              <div>
+                <h2 className="font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+                  Your file goes to doctors. Nowhere else.
+                </h2>
+                <p className="mt-6 text-lg leading-relaxed text-savi-muted">
+                  A health file feels different from any other kind of file.
+                  That&apos;s why we handle yours the way we&apos;d want ours
+                  handled: identifying details stripped out before a single
+                  doctor sees it, encrypted the whole way through, and never
+                  sold, shared, or used for anything except getting you an
+                  answer.
+                </p>
+              </div>
+              <div className="space-y-3">
+                {[
+                  {
+                    icon: ShieldCheck,
+                    title: "Anonymised first",
+                    body: "Your name and contact details never reach a reviewing doctor. They see your medical picture, not your identity.",
+                  },
+                  {
+                    icon: Lock,
+                    title: "Encrypted, always",
+                    body: "Your case is encrypted in transit and at rest, the same standard hospitals hold their own records to.",
+                  },
+                  {
+                    icon: FileCheck2,
+                    title: "Not sold, not shared",
+                    body: "Your case is used for one thing: getting you an answer. We don't sell it, and it isn't handed to advertisers.",
+                  },
+                ].map((r) => (
+                  <div
+                    key={r.title}
+                    className="flex items-start gap-4 rounded-2xl border border-savi-line bg-savi-paper p-6 transition duration-300 hover:-translate-y-0.5 hover:shadow-md"
+                  >
+                    <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-savi-accent-soft text-savi-accent">
+                      <r.icon className="h-4 w-4" strokeWidth={2.25} />
+                    </span>
+                    <div>
+                      <p className="font-semibold">{r.title}</p>
+                      <p className="text-savi-muted">{r.body}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </Reveal>
+
+        {/* Doctor vetting */}
+        <Reveal>
+          <section className="mx-auto max-w-6xl px-5 pt-14 sm:px-8 sm:pt-20">
+            <div className="max-w-2xl">
+              <h2 className="font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+                Every doctor is checked. Every answer is signed.
+              </h2>
+              <p className="mt-6 text-lg leading-relaxed text-savi-muted">
+                We don&apos;t queue you up for whichever doctor is free. Your
+                case goes to specialists whose training actually fits it, and
+                nothing reaches you unsigned.
+              </p>
+            </div>
+            <div className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2">
+              {[
+                {
+                  title: "Licence checked",
+                  body: "Every doctor's registration is verified with their medical board before they can review a single case.",
+                },
+                {
+                  title: "Matched by specialty",
+                  body: "Your case is routed to doctors whose training fits what you're describing, not a general queue.",
+                },
+                {
+                  title: "Reviewed independently",
+                  body: "Each doctor forms their own view before seeing anyone else's, so agreement means something.",
+                },
+                {
+                  title: "Signed, not anonymous",
+                  body: "Every answer carries a real doctor's name, specialty, and credentials, right there with your results.",
+                },
+              ].map((r) => (
+                <div key={r.title} className="flex items-start gap-3">
+                  <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-savi-accent-soft text-savi-accent">
+                    <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                  </span>
+                  <div>
+                    <p className="font-semibold">{r.title}</p>
+                    <p className="mt-1 text-savi-muted">{r.body}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </Reveal>
+
+        {/* FAQ */}
+        <Reveal>
+          <section className="mx-auto max-w-3xl px-5 pt-14 sm:px-8 sm:pt-20">
+            <h2 className="text-center font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+              Questions people ask us
+            </h2>
+            <div className="mt-10">
+              <FaqAccordion
+                items={[
+                  {
+                    q: "Where does my file actually go?",
+                    a: "It's anonymised first, so anything that could identify you is stripped out. What's left, your symptoms, history, and any files you attach, goes only to the doctors matched to your case. Nobody else sees it.",
+                  },
+                  {
+                    q: "Does this replace my own doctor?",
+                    a: "No. Savi gives you a second opinion to bring to your own doctor or specialist. It's another view, not a replacement for the person who knows your full history and can examine you in person.",
+                  },
+                  {
+                    q: "What if the doctors disagree?",
+                    a: "You're told plainly. We don't smooth over disagreement, you see exactly where opinions diverge and why, so you and your doctor can weigh it yourselves.",
+                  },
+                  {
+                    q: "Is this safe to use if I'm seriously unwell?",
+                    a: "No, Savi isn't an emergency service. If you're seriously unwell, call your local emergency number. Every answer we send includes clear guidance on when to seek urgent care.",
+                  },
+                  {
+                    q: "What does it cost?",
+                    a: "Getting started and your first case are free. If that ever changes, you'll know the price before you pay anything.",
+                  },
+                  {
+                    q: "How do I know a real doctor looked at my case?",
+                    a: "Every answer is signed with a real doctor's name, specialty, and credentials, right there with your results, not left anonymous.",
+                  },
+                ]}
+              />
             </div>
           </section>
         </Reveal>

@@ -15,6 +15,7 @@ function statusView(status: CaseStatus): {
   icon: typeof Clock;
   cls: string;
   view: "case" | "summary";
+  hint: string;
 } {
   switch (status) {
     case "clinician_reviewed":
@@ -23,6 +24,7 @@ function statusView(status: CaseStatus): {
         icon: CheckCircle2,
         cls: "bg-savi-accent-soft text-savi-accent-deep",
         view: "summary",
+        hint: "A doctor has signed off. Read what they agree on and what to do next.",
       };
     case "awaiting_clinician":
       return {
@@ -30,6 +32,7 @@ function statusView(status: CaseStatus): {
         icon: Stethoscope,
         cls: "bg-savi-cream border border-savi-line text-savi-muted",
         view: "summary",
+        hint: "A verified specialist is reviewing and signing off on your case.",
       };
     case "error":
       return {
@@ -37,6 +40,7 @@ function statusView(status: CaseStatus): {
         icon: Clock,
         cls: "bg-savi-accent-soft text-savi-accent-deep",
         view: "case",
+        hint: "Something needs a second look before this can continue.",
       };
     default:
       return {
@@ -44,6 +48,7 @@ function statusView(status: CaseStatus): {
         icon: Clock,
         cls: "bg-savi-cream border border-savi-line text-savi-muted",
         view: "case",
+        hint: "Your case is anonymised and matched to the right specialists.",
       };
   }
 }
@@ -88,8 +93,50 @@ export default async function DashboardPage() {
           You&apos;ll usually have a clear answer within a day.
         </p>
 
+        {/* What happens next */}
+        <section className="mt-10 rounded-2xl border border-savi-line bg-savi-paper p-5 sm:p-6">
+          <p className="text-sm font-medium text-savi-muted">
+            What happens after you send it
+          </p>
+          <div className="mt-4 grid gap-4 sm:grid-cols-3">
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-savi-line bg-savi-cream text-savi-muted">
+                <Clock className="h-4 w-4" />
+              </span>
+              <div>
+                <p className="font-semibold">In progress</p>
+                <p className="mt-0.5 text-sm text-savi-muted">
+                  Anonymised, then matched to the right specialists.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-savi-line bg-savi-cream text-savi-muted">
+                <Stethoscope className="h-4 w-4" />
+              </span>
+              <div>
+                <p className="font-semibold">With a doctor</p>
+                <p className="mt-0.5 text-sm text-savi-muted">
+                  A verified specialist reviews and signs off.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-savi-accent-soft text-savi-accent-deep">
+                <CheckCircle2 className="h-4 w-4" />
+              </span>
+              <div>
+                <p className="font-semibold">Answer ready</p>
+                <p className="mt-0.5 text-sm text-savi-muted">
+                  See what they agree on, and what to do next.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Start a case */}
-        <section className="mt-10">
+        <section className="mt-8">
           <h2 className="mb-4 text-xl font-semibold">Start a second opinion</h2>
           <CaseForm />
         </section>
@@ -123,6 +170,7 @@ export default async function DashboardPage() {
                     </div>
                     <div className="flex shrink-0 items-center gap-3">
                       <span
+                        title={s.hint}
                         className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${s.cls}`}
                       >
                         <s.icon className="h-3.5 w-3.5" />
