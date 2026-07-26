@@ -222,11 +222,12 @@ export function buildConsensusPrompt(
     "",
     "Your synthesis must:",
     "- Identify where specialists AGREE (strong signal) and where they DISAGREE, explaining WHY they diverge (different specialties, different priors).",
-    "- Give an honest probability distribution across the most likely diagnoses.",
+    "- Give an honest probability distribution across the most likely diagnoses. Each probability is an INTEGER from 0 to 100 (percent), NOT a decimal between 0 and 1.",
     "- Preserve and explain the minority view whenever it is clinically important, a calibrated distribution that shows disagreement is safer than false certainty.",
     "- Never pretend there is consensus where there isn't, and never manufacture disagreement where the specialists actually agree.",
     "Agreement level: strong = 4 to 5 specialists align, moderate = 3, weak = 2, none = all differ.",
-    "Produce plain-English output a patient can hand to their GP, plus concrete safety-netting advice.",
+    "Write for a patient with no medical background. In recommended_investigations, use plain-English descriptions (e.g. 'A thyroid blood test to check hormone levels' rather than 'TSH and Free T4'). Include the medical name in parentheses only if it helps them speak to their doctor.",
+    "gp_summary: 3 to 4 short sentences a patient can share with their doctor. safety_netting: specific, plain-language symptoms that should prompt urgent care.",
     "Respond with a single JSON object and nothing else.",
   ].join("\n");
 
@@ -284,11 +285,11 @@ export function buildDoctorConsensusPrompt(
     "",
     "Condense their opinions into one clear picture:",
     "- Identify where the doctors AGREE (strong signal) and where they DISAGREE, and explain why they diverge.",
-    "- Give an honest probability distribution across the diagnoses they actually named.",
+    "- Give an honest probability distribution across the diagnoses they actually named. Each probability is an INTEGER from 0 to 100 (percent), NOT a decimal between 0 and 1.",
     "- Preserve and explain a minority view whenever it is clinically important.",
     "- Never manufacture agreement or disagreement; reflect only what the doctors said.",
     "Agreement level: strong = nearly all align, moderate = a clear majority, weak = split, none = all differ.",
-    "Write plain-English output a patient can understand, plus concrete safety-netting.",
+    "Write for a patient with no medical background. In recommended_investigations, use plain-English descriptions (e.g. 'A thyroid blood test to check hormone levels'), with the medical name in parentheses only if useful.",
     "Respond with a single JSON object and nothing else.",
   ].join("\n");
 

@@ -184,9 +184,20 @@ export default function SummaryPage({ params }: { params: { id: string } }) {
               {headline}
             </h1>
             <div className="mt-3 flex flex-wrap items-center gap-2">
-              <Badge className="border-clinical/40 bg-clinical/10 text-clinical-soft">
-                {clampPct(topProb)}% confidence
-              </Badge>
+              {clampPct(topProb) >= 20 && (
+                <Badge className="border-clinical/40 bg-clinical/10 text-clinical-soft">
+                  {clampPct(topProb)}% confidence
+                </Badge>
+              )}
+              {c.agreement_level && c.agreement_level !== "none" && (
+                <Badge variant="secondary">
+                  {c.agreement_level === "strong"
+                    ? "Specialists agreed"
+                    : c.agreement_level === "moderate"
+                      ? "Most specialists agreed"
+                      : "Some disagreement"}
+                </Badge>
+              )}
               {amended && (
                 <Badge variant="secondary">Adjusted by the specialist</Badge>
               )}
@@ -272,12 +283,20 @@ export default function SummaryPage({ params }: { params: { id: string } }) {
               )}
               {c.recommended_investigations.length > 0 && (
                 <div className="mt-4">
-                  <p className="text-xs font-medium text-foreground">Worth asking about</p>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
+                  <p className="text-sm font-semibold text-foreground">
+                    Tests worth asking your doctor for
+                  </p>
+                  <ul className="mt-2 space-y-1.5">
                     {c.recommended_investigations.map((t, i) => (
-                      <Badge key={i} variant="secondary">{t}</Badge>
+                      <li
+                        key={i}
+                        className="flex items-start gap-2 text-sm text-muted-foreground"
+                      >
+                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-clinical-soft" />
+                        {t}
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
               )}
               {c.safety_netting.length > 0 && (

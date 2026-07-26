@@ -348,5 +348,8 @@ export const REDTEAM_JSON_SCHEMA: JsonSchema = {
 /** Clamp a model-supplied percentage into a sane 0 to 100 integer. */
 export function clampPercent(value: number): number {
   if (!Number.isFinite(value)) return 0;
-  return Math.max(0, Math.min(100, Math.round(value)));
+  // Some models return 0.82 instead of 82. Detect and rescale.
+  let n = value;
+  if (n > 0 && n <= 1) n = n * 100;
+  return Math.max(0, Math.min(100, Math.round(n)));
 }
