@@ -146,7 +146,7 @@ export default async function HomePage() {
               {[...SPECIALTIES, ...SPECIALTIES].map((s, i) => (
                 <span
                   key={i}
-                  className="whitespace-nowrap rounded-full border border-savi-line bg-savi-paper px-5 py-2 text-sm font-medium text-savi-ink/80"
+                  className="whitespace-nowrap rounded-full border border-savi-line bg-savi-paper px-5 py-2 text-sm font-medium text-savi-ink/80 transition hover:border-savi-accent/40 hover:text-savi-ink"
                 >
                   {s}
                 </span>
@@ -157,13 +157,16 @@ export default async function HomePage() {
 
         {/* How it works */}
         <Reveal>
-          <section id="how" className="mx-auto max-w-6xl scroll-mt-24 px-5 pt-24 sm:px-8 sm:pt-32">
+          <section id="how" className="mx-auto max-w-6xl scroll-mt-24 px-5 pt-14 sm:px-8 sm:pt-20">
             <h2 className="max-w-2xl font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
               Getting a second opinion used to be hard. Not anymore.
             </h2>
             <div className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-3">
               {STEPS.map((s) => (
-                <div key={s.n}>
+                <div
+                  key={s.n}
+                  className="rounded-2xl border border-transparent p-2 transition duration-300 hover:-translate-y-1 hover:border-savi-line hover:bg-savi-paper hover:shadow-sm"
+                >
                   <div className="font-serif text-2xl text-savi-accent">{s.n}</div>
                   <h3 className="mt-3 text-xl font-semibold">{s.title}</h3>
                   <p className="mt-2 leading-relaxed text-savi-muted">{s.body}</p>
@@ -175,7 +178,7 @@ export default async function HomePage() {
 
         {/* Value */}
         <Reveal>
-          <section className="mx-auto max-w-6xl px-5 pt-24 sm:px-8 sm:pt-32">
+          <section className="mx-auto max-w-6xl px-5 pt-14 sm:px-8 sm:pt-20">
             <div className="grid items-center gap-12 lg:grid-cols-2">
               <div>
                 <h2 className="font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
@@ -196,7 +199,7 @@ export default async function HomePage() {
                 ].map((r) => (
                   <div
                     key={r.title}
-                    className="flex items-start gap-4 rounded-2xl border border-savi-line bg-savi-paper p-6"
+                    className="flex items-start gap-4 rounded-2xl border border-savi-line bg-savi-paper p-6 transition duration-300 hover:-translate-y-0.5 hover:shadow-md"
                   >
                     <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-savi-accent-soft text-savi-accent">
                       <Check className="h-3.5 w-3.5" strokeWidth={3} />
@@ -214,7 +217,7 @@ export default async function HomePage() {
 
         {/* CTA band */}
         <Reveal>
-          <section className="mx-auto max-w-6xl px-5 pb-24 pt-24 sm:px-8 sm:pt-32">
+          <section className="mx-auto max-w-6xl px-5 pb-16 pt-14 sm:px-8 sm:pt-20">
             <div className="rounded-[32px] bg-savi-ink px-8 py-16 text-center sm:px-16 sm:py-20">
               <h2 className="mx-auto max-w-2xl font-serif text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl">
                 Stop wondering. Get an answer.

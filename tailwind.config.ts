@@ -15,33 +15,33 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        base: "#0A0A0B",
-        surface: "#141416",
-        "surface-2": "#1B1B1F",
-        "surface-3": "#232328",
-        line: "#26262B",
-        "line-strong": "#35353C",
+        base: "#FAFAF9",
+        surface: "#FFFFFF",
+        "surface-2": "#F5F4F1",
+        "surface-3": "#ECEBE6",
+        line: "#E7E6E1",
+        "line-strong": "#D3D1CA",
         clinical: {
           DEFAULT: "#2FA79B",
-          soft: "#5FC6BB",
-          deep: "#1F847A",
+          soft: "#1F6F66",
+          deep: "#12564F",
         },
         agree: {
           DEFAULT: "#34D399",
-          soft: "#6EE7B7",
+          soft: "#0E7C56",
         },
         caution: {
           DEFAULT: "#F5A623",
-          soft: "#F8C572",
+          soft: "#8A5A0F",
         },
         danger: {
           DEFAULT: "#FB5C4B",
-          soft: "#FF8578",
+          soft: "#B23324",
         },
         ink: {
-          DEFAULT: "#FAFAFA",
-          muted: "#A1A1AA",
-          faint: "#71717A",
+          DEFAULT: "#131417",
+          muted: "#5B5F66",
+          faint: "#7A7D83",
         },
         savi: {
           cream: "#FAFAF9",
