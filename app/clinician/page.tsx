@@ -68,9 +68,41 @@ export default function ClinicianQueuePage() {
           Cases to review
         </h1>
         <p className="mt-3 text-lg text-savi-muted">
-          Real people waiting for a second opinion. Pick one, read it, and share
-          your view.
+          Real people waiting for a second opinion. Pick one that fits your field,
+          read it, and give your honest view.
         </p>
+
+        {/* How it works for doctors (Delphi) */}
+        <div className="mt-8 grid gap-3 sm:grid-cols-3">
+          {[
+            {
+              n: "1",
+              t: "Pick a case",
+              d: "Choose one matched to your specialty from the live pool below.",
+            },
+            {
+              n: "2",
+              t: "Review independently",
+              d: "Give your own view first, blind to what other doctors said.",
+            },
+            {
+              n: "3",
+              t: "Savi combines views",
+              d: "Your opinion joins others into one clear answer for the patient.",
+            },
+          ].map((s) => (
+            <div
+              key={s.n}
+              className="rounded-2xl border border-savi-line bg-savi-paper p-4"
+            >
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-savi-accent-soft font-serif text-sm font-semibold text-savi-accent">
+                {s.n}
+              </span>
+              <p className="mt-2.5 font-semibold">{s.t}</p>
+              <p className="mt-1 text-sm text-savi-muted">{s.d}</p>
+            </div>
+          ))}
+        </div>
 
         {phase === "loading" && (
           <div className="flex items-center gap-3 py-20 text-savi-muted">

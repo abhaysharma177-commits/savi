@@ -84,8 +84,8 @@ body {
     font-variant-numeric: tabular-nums;
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-base transition
-      hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:ring-offset-2 focus-visible:ring-offset-base
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-white transition
+      hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:ring-offset-2 focus-visible:ring-offset-base
       active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-40;
   }
   .btn-accent {
