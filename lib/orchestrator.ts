@@ -11,6 +11,7 @@ import {
   SPECIALISTS,
   buildConsensusPrompt,
   buildDoctorConsensusPrompt,
+  buildIntakeQuestionsPrompt,
   buildRedTeamPrompt,
   buildSpecialistPrompt,
   buildStructurePrompt,
@@ -21,6 +22,8 @@ import type { Opinion } from "./records";
 import {
   CONSENSUS_JSON_SCHEMA,
   ConsensusSchema,
+  INTAKE_QUESTIONS_JSON_SCHEMA,
+  IntakeQuestionsSchema,
   REDTEAM_JSON_SCHEMA,
   REVIEW_JSON_SCHEMA,
   RedTeamSchema,
@@ -60,6 +63,35 @@ export async function structureCase(
     thinking: false,
     maxTokens: 3000,
   });
+}
+
+/** Intake: a few plain-language follow-up questions to complete the case. */
+export async function generateIntakeQuestions(
+  anonymised: AnonymisedCase
+): Promise<string[]> {
+  if (isMockMode()) {
+    return [
+      "How long has this been going on?",
+      "How much is it affecting your day-to-day life?",
+      "Have you noticed anything that makes it better or worse?",
+      "Are you taking any medicines, or do you have any ongoing conditions?",
+    ];
+  }
+  try {
+    const { system, user } = buildIntakeQuestionsPrompt(anonymised);
+    const res = await generateStructured(IntakeQuestionsSchema, {
+      model: MODELS.triage,
+      system,
+      prompt: user,
+      jsonSchema: INTAKE_QUESTIONS_JSON_SCHEMA,
+      effort: EFFORT.triage,
+      thinking: false,
+      maxTokens: 800,
+    });
+    return res.questions.map((q) => q.trim()).filter(Boolean).slice(0, 5);
+  } catch {
+    return [];
+  }
 }
 
 /** Stage 0, triage: assess urgency and route to a human specialty. */

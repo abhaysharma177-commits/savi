@@ -105,7 +105,7 @@ export function CaseForm() {
       });
       const json = (await res.json()) as { caseId?: string; error?: string };
       if (!res.ok || !json.caseId) throw new Error(json.error || "Something went wrong. Please try again.");
-      router.push(`/case/${json.caseId}`);
+      router.push(`/intake/${json.caseId}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
       setLoading(false);

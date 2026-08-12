@@ -182,6 +182,19 @@ export type JsonSchema = Record<string, unknown>;
 
 const stringArray: JsonSchema = { type: "array", items: { type: "string" } };
 
+/* Intake follow-up questions the AI asks the patient before doctors review. */
+export const IntakeQuestionsSchema = z.object({
+  questions: z.array(z.string()).catch([]),
+});
+export type IntakeQuestions = z.infer<typeof IntakeQuestionsSchema>;
+
+export const INTAKE_QUESTIONS_JSON_SCHEMA: JsonSchema = {
+  type: "object",
+  additionalProperties: false,
+  required: ["questions"],
+  properties: { questions: stringArray },
+};
+
 export const STRUCTURE_JSON_SCHEMA: JsonSchema = {
   type: "object",
   additionalProperties: false,

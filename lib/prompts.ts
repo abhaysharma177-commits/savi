@@ -164,6 +164,33 @@ export function buildTriagePrompt(anonymisedCase: AnonymisedCase): PromptPair {
   return { system, user };
 }
 
+/** Intake: the few follow-up questions a good doctor would ask, in plain words. */
+export function buildIntakeQuestionsPrompt(a: AnonymisedCase): PromptPair {
+  const system = [
+    "You are a warm, careful intake assistant for a second-opinion health service.",
+    "A patient has described their concern in their own words. Before doctors review it, ask the SHORT set of follow-up questions a good doctor would genuinely want answered to understand the case.",
+    "Rules:",
+    "- Ask 3 to 5 questions. Never more. Only ones that would actually change how a doctor sees the case.",
+    "- Plain, warm, everyday language. No medical jargon. A worried person with no medical background must understand each question instantly.",
+    "- One idea per question. Keep each short.",
+    "- Do not diagnose, reassure, or explain. Just ask.",
+    'Respond with a single JSON object: { "questions": ["...", "..."] } and nothing else.',
+  ].join("\n");
+
+  const user = [
+    "What the patient told us so far:",
+    `Concern: ${a.presenting_complaint}`,
+    `Timeline: ${a.symptom_timeline}`,
+    `Details: ${a.symptom_details.join("; ")}`,
+    `History: ${a.relevant_history}`,
+    `About them: ${a.patient_demographics}`,
+    "",
+    "Write the follow-up questions.",
+  ].join("\n");
+
+  return { system, user };
+}
+
 /** Stage 2, one specialist's independent, blind review of the case. */
 export function buildSpecialistPrompt(
   specialist: Specialist,
