@@ -282,6 +282,25 @@ export default function ClinicianCasePage({ params }: { params: { id: string } }
                     </div>
                   )}
                 </div>
+
+                {a.intake_answers && a.intake_answers.length > 0 && (
+                  <div className="mt-4">
+                    <p className="text-xs font-medium uppercase tracking-wide text-savi-muted">
+                      Follow-up questions
+                    </p>
+                    <div className="mt-2 space-y-2.5">
+                      {a.intake_answers.map((qa, i) => (
+                        <div
+                          key={i}
+                          className="rounded-xl border border-savi-line bg-white p-3"
+                        >
+                          <p className="text-sm font-medium text-savi-ink">{qa.question}</p>
+                          <p className="mt-1 text-sm text-savi-ink/80">{qa.answer}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Savi's AI read — shown first, framed as provisional */}

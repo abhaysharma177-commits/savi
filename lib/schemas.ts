@@ -34,6 +34,11 @@ export const AnonymisedCaseSchema = z.object({
   relevant_history: z.string().catch(""),
   lifestyle_context: z.string().catch(""),
   patient_demographics: z.string().catch(""),
+  // Plain-language follow-ups the patient answered at intake. Optional so the
+  // structuring model never has to produce it; it's added later, when answered.
+  intake_answers: z
+    .array(z.object({ question: z.string(), answer: z.string() }))
+    .optional(),
 });
 export type AnonymisedCase = z.infer<typeof AnonymisedCaseSchema>;
 

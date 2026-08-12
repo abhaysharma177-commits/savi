@@ -26,22 +26,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Case not found." }, { status: 404 });
     }
 
-    const answered = answers.filter((a) => a.answer.trim());
+    const answered = answers
+      .filter((a) => a.answer.trim())
+      .map((a) => ({ question: a.question, answer: a.answer.trim() }));
     if (answered.length > 0) {
-      // Fold the follow-up answers into the clinical picture the panel and
-      // doctors read. The patient's original words (raw_input) are left untouched.
-      const extra = answered
-        .map((a) => `${a.question} — ${a.answer.trim()}`)
-        .join(" ");
-      const merged = {
-        ...c.anonymised_case,
-        relevant_history: [
-          c.anonymised_case.relevant_history,
-          `Follow-up answers: ${extra}`,
-        ]
-          .filter((s) => s && s.trim())
-          .join(" "),
-      };
+      // Store the follow-ups as clean, structured Q&A on the case. The AI panel
+      // reads the whole anonymised case as JSON, so it sees these; the doctor
+      // sees them as a tidy list. The patient's original words are untouched,
+      // and the History field stays clean.
+      const merged = { ...c.anonymised_case, intake_answers: answered };
       await store.updateCase(caseId, {
         anonymised_case: merged,
         ...(c.structured_case
