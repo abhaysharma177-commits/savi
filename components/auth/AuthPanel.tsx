@@ -42,6 +42,8 @@ export function AuthPanel({
   const [role, setRole] = useState<Role>(defaultRole);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [specialty, setSpecialty] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -59,7 +61,13 @@ export function AuthPanel({
         const res = await fetch("/api/auth/signup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, role: roleMeta }),
+          body: JSON.stringify({
+            email,
+            password,
+            role: roleMeta,
+            name: name.trim() || undefined,
+            specialty: specialty.trim() || undefined,
+          }),
         });
         const j = (await res.json()) as { ok?: boolean; error?: string };
         if (!res.ok) throw new Error(j.error || "Could not create your account.");
@@ -130,6 +138,38 @@ export function AuthPanel({
           <p className="mt-2 text-savi-muted">{copy.sub}</p>
 
           <form onSubmit={submit} className="mt-7 space-y-4">
+            {isSignup && role === "doctor" && (
+              <>
+                <div>
+                  <label htmlFor="name" className="text-sm font-medium">
+                    Full name
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Dr. Jordan Ellis"
+                    className="mt-1.5 w-full rounded-xl border border-savi-line bg-savi-cream/50 px-3.5 py-3 text-savi-ink placeholder:text-savi-muted focus:border-savi-accent/50 focus:outline-none focus:ring-2 focus:ring-savi-accent/10"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="specialty" className="text-sm font-medium">
+                    Your specialty
+                  </label>
+                  <input
+                    id="specialty"
+                    type="text"
+                    required
+                    value={specialty}
+                    onChange={(e) => setSpecialty(e.target.value)}
+                    placeholder="e.g. Cardiology, Endocrinology, Psychiatry"
+                    className="mt-1.5 w-full rounded-xl border border-savi-line bg-savi-cream/50 px-3.5 py-3 text-savi-ink placeholder:text-savi-muted focus:border-savi-accent/50 focus:outline-none focus:ring-2 focus:ring-savi-accent/10"
+                  />
+                </div>
+              </>
+            )}
             <div>
               <label htmlFor="email" className="text-sm font-medium">
                 Email

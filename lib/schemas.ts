@@ -156,6 +156,16 @@ export type ClinicianReviewInput = z.infer<typeof ClinicianReviewInputSchema>;
 
 export const OpinionInputSchema = z.object({
   clinician_id: z.string().min(1),
+  // When a real, signed-in doctor reviews, their identity travels with the
+  // opinion. When omitted, we fall back to the demo roster by clinician_id.
+  clinician: z
+    .object({
+      name: z.string().min(1),
+      specialty: z.string().min(1),
+      credentials: z.string().optional().default(""),
+      registration: z.string().optional().default(""),
+    })
+    .optional(),
   diagnosis: z.string().min(1).max(400),
   assessment: z.string().min(1).max(4000),
 });

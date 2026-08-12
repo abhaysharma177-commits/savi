@@ -11,10 +11,12 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(req: NextRequest) {
   try {
-    const { email, password, role } = (await req.json()) as {
+    const { email, password, role, name, specialty } = (await req.json()) as {
       email?: string;
       password?: string;
       role?: string;
+      name?: string;
+      specialty?: string;
     };
 
     if (!email || !password || password.length < 6) {
@@ -41,7 +43,11 @@ export async function POST(req: NextRequest) {
       email,
       password,
       email_confirm: true,
-      user_metadata: { role: role === "clinician" ? "clinician" : "patient" },
+      user_metadata: {
+        role: role === "clinician" ? "clinician" : "patient",
+        ...(name ? { name } : {}),
+        ...(specialty ? { specialty } : {}),
+      },
     });
 
     if (error) {

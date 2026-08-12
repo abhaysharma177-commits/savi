@@ -84,7 +84,17 @@ function buildClinicianReview(
 }
 
 function buildOpinion(caseId: string, input: OpinionInput): Opinion {
-  const clinician = getClinician(input.clinician_id);
+  const clinician = input.clinician
+    ? {
+        id: input.clinician_id,
+        name: input.clinician.name,
+        specialty: input.clinician.specialty,
+        credentials: input.clinician.credentials || "",
+        registration: input.clinician.registration || "",
+        verified: true,
+        bio: "",
+      }
+    : getClinician(input.clinician_id);
   if (!clinician) {
     throw new AppError("Unknown clinician.", 400);
   }
