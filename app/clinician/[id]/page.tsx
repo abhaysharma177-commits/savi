@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -60,6 +60,8 @@ export default function ClinicianCasePage({ params }: { params: { id: string } }
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const aiTriedRef = useRef(false);
 
   const load = useCallback(async () => {
     try {
@@ -74,9 +76,39 @@ export default function ClinicianCasePage({ params }: { params: { id: string } }
     }
   }, [caseId]);
 
+  // If a case has no AI read yet, run the panel so the doctor always sees one.
+  const generateAiRead = useCallback(async () => {
+    setAiGenerating(true);
+    try {
+      const r = await fetch("/api/run-reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ caseId }),
+      });
+      await r.text(); // drain the stream so the reviews finish
+      await fetch("/api/synthesise", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ caseId }),
+      });
+      await load();
+    } catch {
+      /* leave the fallback message in place */
+    } finally {
+      setAiGenerating(false);
+    }
+  }, [caseId, load]);
+
   useEffect(() => {
     void load();
   }, [load]);
+
+  useEffect(() => {
+    if (bundle && !bundle.consensus && !aiTriedRef.current) {
+      aiTriedRef.current = true;
+      void generateAiRead();
+    }
+  }, [bundle, generateAiRead]);
 
   useEffect(() => {
     (async () => {
@@ -207,6 +239,23 @@ export default function ClinicianCasePage({ params }: { params: { id: string } }
                 {a.symptom_timeline && (
                   <p className="mt-3 text-savi-muted">{a.symptom_timeline}</p>
                 )}
+
+                {bundle.case.raw_input?.trim() && (
+                  <div className="mt-4 rounded-2xl border-l-2 border-savi-ink/25 bg-white px-4 py-3.5 shadow-sm">
+                    <p className="text-xs font-medium uppercase tracking-wide text-savi-muted">
+                      In the patient&apos;s own words
+                    </p>
+                    <p className="mt-2 whitespace-pre-line text-[15px] leading-relaxed text-savi-ink/90">
+                      {bundle.case.raw_input}
+                    </p>
+                  </div>
+                )}
+
+                {a.symptom_details.length > 0 && (
+                  <p className="mt-5 text-xs font-medium uppercase tracking-wide text-savi-muted">
+                    Structured summary
+                  </p>
+                )}
                 {a.symptom_details.length > 0 && (
                   <div className="mt-4 flex flex-wrap gap-1.5">
                     {a.symptom_details.map((s, i) => (
@@ -245,23 +294,29 @@ export default function ClinicianCasePage({ params }: { params: { id: string } }
                 </div>
                 {ai ? (
                   <>
-                    <p className="mt-3 font-serif text-xl font-semibold">
+                    <p className="mt-3 text-sm text-savi-muted">
+                      Savi&apos;s panel thinks the most likely explanation is
+                    </p>
+                    <p className="mt-1 font-serif text-xl font-semibold">
                       {ai.consensus_diagnosis}
                     </p>
                     {ai.key_agreements?.length > 0 && (
-                      <ul className="mt-3 space-y-1.5">
-                        {ai.key_agreements.slice(0, 3).map((k, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-savi-ink/80">
-                            <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-savi-trust" />
-                            {k}
-                          </li>
-                        ))}
-                      </ul>
+                      <div className="mt-3">
+                        <p className="text-xs font-medium text-savi-muted">Why</p>
+                        <ul className="mt-1.5 space-y-1.5">
+                          {ai.key_agreements.slice(0, 3).map((k, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm text-savi-ink/80">
+                              <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-savi-trust" />
+                              {k}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )}
                     {ai.recommended_investigations?.length > 0 && (
                       <div className="mt-3 border-t border-savi-line pt-3">
                         <p className="flex items-center gap-1.5 text-xs font-medium text-savi-muted">
-                          <ClipboardList className="h-3.5 w-3.5" /> Savi suggests
+                          <ClipboardList className="h-3.5 w-3.5" /> Savi suggests checking
                         </p>
                         <p className="mt-1 text-sm text-savi-ink/80">
                           {ai.recommended_investigations.slice(0, 4).join(" · ")}
@@ -269,13 +324,18 @@ export default function ClinicianCasePage({ params }: { params: { id: string } }
                       </div>
                     )}
                     <p className="mt-3 text-xs text-savi-muted">
-                      This is a starting point, not a verdict. Your review is what counts.
+                      A starting point, not a verdict. Your review is what counts.
                     </p>
                   </>
+                ) : aiGenerating ? (
+                  <div className="mt-3 flex items-center gap-2 text-sm text-savi-muted">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Savi is reading the case…
+                  </div>
                 ) : (
                   <p className="mt-3 text-sm text-savi-muted">
-                    Savi&apos;s panel hasn&apos;t finished its first pass on this case
-                    yet. You can still review it from the notes above.
+                    Savi&apos;s read isn&apos;t ready. Review from the patient&apos;s
+                    words above.
                   </p>
                 )}
               </div>
